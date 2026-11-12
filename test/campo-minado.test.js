@@ -87,3 +87,30 @@ test('CM08 só declara vitória ao abrir a última das 212 casas seguras', () =>
     expect(new Set(estado.reveladas.map(({ posicao }) => posicao.join(','))).size).toBe(212);
     expect(estado.status).toBe('vitoria');
 });
+
+test('CM09 rejeita coordenadas fracionárias ao revelar', () => {
+    expect(() => revelar(campo(), [0.5, 0])).toThrow(RangeError);
+    expect(() => revelar(campo(), [0, 2.5])).toThrow(RangeError);
+});
+
+test('CM10 expansão de zero abre exatamente a região conectada e seu contorno', () => {
+    const estado = revelar(campo(), [6, 8]);
+    const isoladas = new Set(['0,0', '0,2', '0,3', '1,2']);
+    const bombas = new Set(minas.map(posicao => posicao.join(',')));
+    const esperadas = new Set();
+    for (let linha = 0; linha < 14; linha += 1) {
+        for (let coluna = 0; coluna < 18; coluna += 1) {
+            const chave = `${linha},${coluna}`;
+            if (!bombas.has(chave) && !isoladas.has(chave)) esperadas.add(chave);
+        }
+    }
+    expect(esperadas.size).toBe(208);
+    expect(new Set(estado.reveladas.map(({ posicao }) => posicao.join(',')))).toEqual(esperadas);
+    expect(estado.reveladas).toHaveLength(208);
+    expect(estado.status).toBe('em_andamento');
+});
+
+test('CM11 repetir revelação preserva todo o estado observável', () => {
+    const estado = revelar(campo(), [0, 0]);
+    expect(revelar(estado, [0, 0])).toEqual(estado);
+});

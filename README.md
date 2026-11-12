@@ -21,6 +21,9 @@ Em `src/jogo.js`, exporte as funções síncronas abaixo. Uma posição é `[lin
 - **CM06** garante que revelar a mesma casa duas vezes não a duplica.
 - **CM07** confirma derrota ao revelar uma bomba.
 - **CM08** confirma que 211 casas seguras abertas ainda deixam a partida em andamento e que a abertura da 212ª dá vitória.
+- **CM09** rejeita coordenadas fracionárias ao revelar.
+- **CM10** confere todas as casas abertas pela expansão de um zero.
+- **CM11** verifica que repetir uma revelação preserva o estado inteiro.
 
 ## Execução
 
